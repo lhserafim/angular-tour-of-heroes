@@ -1,2 +1,3 @@
 Anotações TOUR OF HEROES
-1.  Criação do projeto: https://angular.io/tutorial/toh-pt0
+0.  Criação do projeto: https://angular.io/tutorial/toh-pt0
+1.  O editor do herói: https://angular.io/tutorial/toh-pt1

@@ -9,15 +9,21 @@
     </li>
 </ul>
 
-<div *ngIf="selectedHero">
-    <!-- IMPORTANTE
+<!-- Fazendo o bind  da propriedade selectedHero no componente heroDetail 
+     estou colocando como [hero], pois é o nome da propriedade criada em hero-detail.component.ts e usada no html -->
+<app-hero-detail [hero]="selectedHero"></app-hero-detail>
+
+
+<!-- Movido p/ o componente hero-detail -->
+<!-- <div *ngIf="selectedHero">
+    IMPORTANTE
     Eu não posso fazer biding expressions de algo vazio (undefined).
     Como eu criei a propriedade selectedHero e deixei ela vazia então eu preciso fazer um IF *ngIf para garantir que só
     vou fazer o biding se for TRUE 
     Why it works
     When selectedHero is undefined, the ngIf removes the hero detail from the DOM. 
     There are no selectedHero bindings to consider.
-    -->
+    
     <h2>{{selectedHero.name | uppercase}} Details</h2>
     <div><span>id: </span>{{selectedHero.id}}</div>
     <div>
@@ -25,7 +31,7 @@
       <input id="hero-name" [(ngModel)]="selectedHero.name" placeholder="name">
     </div>
 
-</div>
+</div> -->
 
 
 

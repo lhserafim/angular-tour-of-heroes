@@ -35,4 +35,15 @@ Anotações TOUR OF HEROES
     2.2.  Class binding. Angular permite que você adicione ou remova uma classe CSS de forma condicional.
           Basta adicionar: [class.some-css-class]="some-condition"
         2.1.1.  [class.selected]="hero === selectedHero"
-
+3.  Criando um novo componente (feature component): https://angular.io/tutorial/toh-pt3
+    3.1.  What changed?
+          As before, whenever a user clicks on a hero name, the hero detail appears below the hero list. 
+          Now the HeroDetailComponent is presenting those details instead of the HeroesComponent.
+          Refactoring the original HeroesComponent into two components yields benefits, both now and in the future:
+        3.1.1.  You reduced the HeroesComponent responsibilities.
+        3.1.2.  You can evolve the HeroDetailComponent into a rich hero editor without touching the parent HeroesComponent.
+        3.1.3.  You can evolve the HeroesComponent without touching the hero detail view.
+        3.1.4.  You can re-use the HeroDetailComponent in the template of some future component.
+    3.2.  @Input: A propriedade do componente hero precisa ser @Input() pois o componente externo HeroesComponent faz o bind 
+          através do comando: <app-hero-detail [hero]="selectedHero"></app-hero-detail>
+        3.2.1.  [hero]="selectedHero" is an Angular property binding.

@@ -47,3 +47,43 @@ Anotações TOUR OF HEROES
     3.2.  @Input: A propriedade do componente hero precisa ser @Input() pois o componente externo HeroesComponent faz o bind 
           através do comando: <app-hero-detail [hero]="selectedHero"></app-hero-detail>
         3.2.1.  [hero]="selectedHero" is an Angular property binding.
+4.  Adicionando um serviço. Como um componente NÃO DEVE buscar/salvar dados, deve-se ser usado um SERVICE. Os serviços são ótimos
+    para compartilhar informação através das classes que "não se conhecem". Para isso usamos a injeção.
+    O decorador @Injectable marca a classe como sistema de injeção de dependências e permite que a classe receba metadados
+    Outra vantagem dos serviços, é que você pode alterar a origem dos dados, sem se preocupar com os componentes
+    4.1.  Uma vez criado o serviço, através do CLI (ng g s hero) faço a criação do método desejado
+        4.1.1.  É importante que o meu serviço tenha o decorador @Injectable e o provider
+                Ex.:
+                @Injectable({
+                  providedIn: 'root'
+                })
+    4.2.  No componente que eu quero fazer a injeção do serviço, devo fazer:
+        4.2.1.  A importação do serviço: import { HeroService } from '../hero.service';
+        4.2.2.  A injeção do serviço no construtor: constructor(private heroService: HeroService) {}
+        4.2.3.  Criar um método para chamar o método criado no serviço
+        4.2.4.  Colocar a chamada do método dentro do ngOnInit()
+    4.3.  OBSERVABLE DATA: Como iremos consumir dados de um servidor remoto, temos que trabalhar com operações assíncronas e a forma
+          que trabalhamos com este tipo de transação assíncrona é com OBSERVABLES e protocolos HTTP.
+          Observable é uma das classes mais importantes da biblioteca RxJS
+        4.3.1.  No hero.service.ts, fazer a importação: import { Observable, of } from 'rxjs';
+        4.3.2.  No método preciso alterar o retorno para: getHeroes(): Observable<Hero[]> {}
+        4.3.3.  Em seguida, preciso usar o SUBSCRIBE no método que está chamado o método do serviço
+    4.4.  MESSAGES: Adicionando um componente para exibir as mensagens no rodapé da página
+        4.4.1.  Criação do componente messages: ng generate component messages
+        4.4.2.  Adicionar o componente ao app.component.html: <app-messages></app-messages>
+        4.4.3.  Criar o serviço de mensagens: MessageService
+            4.4.3.1.  O serviço fica no app: ng generate service message
+            4.4.3.2.  Criar propriedade e método
+            4.4.3.3.  Injetar o método no HeroService
+                4.4.3.3.1.  Em HeroService, importar e injetar o MessageService. Isto cria um "service-in-service"
+            4.4.3.4.  Enviar uma mensagem pelo HeroService
+                4.4.3.4.1.  Alterar o método para enviar uma mensagem quando os heróis forem recuperados, adicionando a 
+                            chamada do serviço:   this.messageService.add('HeroService: fetched heroes');            
+            4.4.3.5.  Exibir mensagem recebida do HeroService
+                4.4.3.5.1.  Importar o MessageService no componente messages.component. Isto vai permitir ao componente
+                            mostrar todas as mensagens inclusive as geradas pelo HeroService
+                4.4.3.5.2.  Injetar como público dentro do construtor. Isto porque faremos o bind em um template
+                            The messageService property must be public because you're going to bind to it in the template.
+                            Angular only binds to public component properties.
+            4.4.3.6.  Fazer o bind no MessageService. Preparar o HTML para exibir mensagens e limpá-las, quando necessário
+

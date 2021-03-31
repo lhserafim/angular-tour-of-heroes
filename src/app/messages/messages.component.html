@@ -1,0 +1,10 @@
+<!-- Só vai exibir a área de mensagens se houverem mensagens -->
+<div *ngIf="messageService.messages.length">
+
+    <h2>Messages</h2>
+    <button class="clear"
+            (click)="messageService.clear()">Clear messages</button>
+    <!-- o *ngFor vai gerar uma lista de mensagens -->
+    <div *ngFor="let message of messageService.messages">{{message}}</div>
+
+</div>

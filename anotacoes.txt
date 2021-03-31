@@ -1,3 +1,38 @@
 Anotações TOUR OF HEROES
 0.  Criação do projeto: https://angular.io/tutorial/toh-pt0
 1.  O editor do herói: https://angular.io/tutorial/toh-pt1
+    1.1.  Uso de diretivas. Two way data bind: [(ngModel)]. Para usar esta diretiva, são necessários alguns passos
+        1.1.1.  Fazer a importação do FormsModue: import { FormsModule } from '@angular/forms'; // <-- NgModel lives here
+        1.1.2.  Criar a propriedade, dentro da classe do componente que receberá o valor da diretiva [(ngModel)]
+        1.1.3.  Colocar a diretiva no html, apontando p/ a propriedade que eu quero atualizar: [(ngModel)]="hero.name"
+    1.2.  DIRETIVAS: As diretivas são marcadores em um elemento DOM (como um atributo) que informam ao Angular para anexar um comportamento 
+          especificado a um elemento existente.
+          Algumas diretivas podem mudar completamente a estrutura da saída do template do componente. Essas diretivas podem alterar o 
+          layout do DOM adicionando e removendo elementos DOM de visualização.
+        1.2.1.  Podemos classificar essas diretivas em estruturais. 
+                Usadas com *
+                *NgIf
+                *NgFor
+                *NgSwitch, NgSwitchWhen, NgSwitchDefault
+        1.2.2.  Outras diretivas podem simplesmente alterar a aparência dos itens gerados pelo modelo. 
+                Vamos chamar essas diretivas de atributo:
+                Usadas dentro de []
+                [NgClass]
+                [NgStyle]
+                [NgControlName]
+                [NgModel]
+        1.2.3.  https://angular.io/guide/built-in-directives
+                The different types of Angular directives are as follows:
+                Components—directives with a template. This type of directive is the most common directive type.
+                Attribute directives—directives that change the appearance or behavior of an element, component, or another directive.
+                Structural directives—directives that change the DOM layout by adding and removing DOM elements.        
+2.  Exbindo uma lista: https://angular.io/tutorial/toh-pt2
+    2.1.  Event binding
+        2.1.1.  <li *ngFor="let hero of heroes" (click)="onSelect(hero)">
+                This is an example of Angular's event binding syntax.
+                The parentheses around click tell Angular to listen for the <li> element's click event. When the user clicks 
+                in the <li>, Angular executes the onSelect(hero) expression.
+    2.2.  Class binding. Angular permite que você adicione ou remova uma classe CSS de forma condicional.
+          Basta adicionar: [class.some-css-class]="some-condition"
+        2.1.1.  [class.selected]="hero === selectedHero"
+

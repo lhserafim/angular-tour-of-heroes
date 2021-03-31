@@ -1,12 +1,51 @@
-<!-- 
+<h2>My Heroes</h2>
+<ul class="heroes">
+    <!-- No exemplo abaixo, estou utilizando CLASS BINDING, para condicionalmente aplicar uma classe 
+         O (click) é um evento, escutado pelo angular -->
+    <li *ngFor="let hero of heroes"
+        [class.selected]="hero === selectedHero"
+        (click)="onSelect(hero)">
+        <span class="badge">{{hero.id}}</span> {{hero.name}}
+    </li>
+</ul>
+
+<div *ngIf="selectedHero">
+    <!-- IMPORTANTE
+    Eu não posso fazer biding expressions de algo vazio (undefined).
+    Como eu criei a propriedade selectedHero e deixei ela vazia então eu preciso fazer um IF *ngIf para garantir que só
+    vou fazer o biding se for TRUE 
+    Why it works
+    When selectedHero is undefined, the ngIf removes the hero detail from the DOM. 
+    There are no selectedHero bindings to consider.
+    -->
+    <h2>{{selectedHero.name | uppercase}} Details</h2>
+    <div><span>id: </span>{{selectedHero.id}}</div>
+    <div>
+      <label for="hero-name">Hero name: </label>
+      <input id="hero-name" [(ngModel)]="selectedHero.name" placeholder="name">
+    </div>
+
+</div>
+
+
+
+<!-- O editor do herói -> REMOVIDO
+
 Format with the UppercasePipe
 Pipes are a good way to format strings, currency amounts, dates and other display data. 
 Angular ships with several built-in pipes and you can create your own. 
--->
+
 <h2> {{ hero.name | uppercase}} Details</h2>
 <div><span>id: </span>{{ hero.id }}</div>
 <div>
+
+label for
+The id of a labelable form-related element in the same document as the <label> element. 
+The first element in the document with an id matching the value of the for attribute is the labeled control for this label
+element if it is a labelable element. If it is not labelable then the for attribute has no effect. 
+If there are other elements that also match the id value, later in the document, they are not considered.
     <label for="name">Hero name: </label>
-    <!-- [(ngModel)] is Angular's two-way data binding syntax. -->
+    
     <input id="name" [(ngModel)]="hero.name" placeholder="name">
-</div>
+</div> 
+-->

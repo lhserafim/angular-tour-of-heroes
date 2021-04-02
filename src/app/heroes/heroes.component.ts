@@ -21,10 +21,10 @@ export class HeroesComponent implements OnInit {
   }
 
   // Método chamado no evento bind (click) do HTML
-  onSelect(hero: Hero): void {
-    this.selectedHero = hero;
-    this.messageService.add(`HeroesComponent: Selected hero id=${hero.id}`); // uso do template string p/ interpolar o id
-  }
+  // onSelect(hero: Hero): void {
+  //   this.selectedHero = hero;
+  //   this.messageService.add(`HeroesComponent: Selected hero id=${hero.id}`); // uso do template string p/ interpolar o id
+  // }
 
   // Vai fazer um push no meu array de Hero
   getHeroes(): void {

@@ -1,17 +1,25 @@
 <h2>My Heroes</h2>
 <ul class="heroes">
-    <!-- No exemplo abaixo, estou utilizando CLASS BINDING, para condicionalmente aplicar uma classe 
-         O (click) é um evento, escutado pelo angular -->
+    <li *ngFor="let hero of heroes">
+      <a routerLink="/detail/{{hero.id}}">
+        <span class="badge">{{hero.id}}</span> {{hero.name}}
+      </a>
+    </li>
+</ul>
+
+<!-- <ul class="heroes">
+     No exemplo abaixo, estou utilizando CLASS BINDING, para condicionalmente aplicar uma classe 
+         O (click) é um evento, escutado pelo angular 
     <li *ngFor="let hero of heroes"
         [class.selected]="hero === selectedHero"
         (click)="onSelect(hero)">
         <span class="badge">{{hero.id}}</span> {{hero.name}}
     </li>
-</ul>
+</ul> -->
 
 <!-- Fazendo o bind  da propriedade selectedHero no componente heroDetail 
      estou colocando como [hero], pois é o nome da propriedade criada em hero-detail.component.ts e usada no html -->
-<app-hero-detail [hero]="selectedHero"></app-hero-detail>
+<!-- <app-hero-detail [hero]="selectedHero"></app-hero-detail> -->
 
 
 <!-- Movido p/ o componente hero-detail -->

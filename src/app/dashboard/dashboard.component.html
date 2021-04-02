@@ -1,0 +1,9 @@
+<h2>Top Heroes</h2>
+<div class="heroes-menu">
+  <a *ngFor="let hero of heroes"
+    routerLink="/detail/{{hero.id}}">
+    {{hero.name}}
+  </a>
+  <!-- A diretiva *ngFor, apenas monta a tela, através da repetição da interpolação o nome do herói
+  O que faz o roteamento funcionar, é o routerLink, que transforma em link o meu herói e roteia fazendo o interpolation binding -->
+</div>

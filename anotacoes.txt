@@ -86,4 +86,59 @@ Anotações TOUR OF HEROES
                             The messageService property must be public because you're going to bind to it in the template.
                             Angular only binds to public component properties.
             4.4.3.6.  Fazer o bind no MessageService. Preparar o HTML para exibir mensagens e limpá-las, quando necessário
+5.  Adicionando navegação (Routing)
+    5.1.  Criando o arquivo de roteamento. Normalmente, quando eu crio um projeto em angular eu já crio o arquivo de roteamento
+          porem, caso eu preciso adicionar depois, preciso executar o comando: 
+          ng generate module app-routing --flat --module=app
+          --flat puts the file in src/app instead of its own folder.
+          --module=app tells the CLI to register it in the imports array of the AppModule.
+    5.2.  ROUTES: 
+          O PATH é onde colocamos o texto que será adicionado a URL.
+          O COMPONENT é o componente que a rota deverá carregar
+    5.3.  No app.component.html, adicionar o <router-outlet> para que o angular carregue as views roteadas
+    5.4.  Adicionando um link de navegação. Basta colocar um <nav> <a routerLink="/heroes">, ou seja, o link que aponta para minha rota
+    5.5.  Adicionando uma rota padrão: { path: '', redirectTo: '/dashboard', pathMatch: 'full' }. Ou seja, quando o site for carregado,
+          que bata com o pathMatch, o link carregado será o do redirectTo
+    5.6.  Adicionado um path parametrizado: { path: 'detail/:id', component: HeroDetailComponent }
+          Os : no path indicam que o :id é um placeholder para um id
+          5.6.1.  INTERPOLATION BINDING: Para chamar um path parametrizado, eu preciso fazer a interpolação bind routerLink="detail/{{hero.id}}". Conforme exemplo:
+                  Ex.: 
+                  <a *ngFor="let hero of heroes"
+                      routerLink="/detail/{{hero.id}}">
+                      {{hero.name}}
+                  </a>
+    5.7.  Transformando meu componente (HeroDetailComponent) em roteável. Este componente precisa extrair o parâmetro id da rota
+        5.7.1.  Em hero-detail.component.ts, fazer a importação de ActivatedRoute e Location
+            5.7.1.1.  ActivatedRoute, mantem a informação da rota da instancia de HeroDetailComponent. É usado pois este componente
+                      está interessado em extrair o id da URL e injetar no construtor
+            5.7.1.2.  Location, é um serviço do Angular para interagir com o navegador e será usado para fazer o botão voltar
+        5.7.2.  Extraindo o id da rota parametrizavel
+            5.7.2.1.  Dentro do hero-detail-component.ts, criar um método (para ser chamado no ngOnInit()), que extraí o id da rota.
+                      Ex.:
+                      ngOnInit(): void {
+                            this.getHero();
+                      }
 
+                      getHero(): void {
+                        const id = +this.route.snapshot.paramMap.get('id');
+                        this.heroService.getHero(id)
+                            .subscribe(hero => this.hero = hero);
+                      } 
+                5.7.2.1.1.  route.snapshot: é uma imagem estática da informação da rota, imediatamente a criação do componente
+                5.7.2.1.2.  paramMap: é um dicionário dos parâmetros da rota, ou seja, identifica os parâmetros na URL e usando o .get(id), pego o parametro desejado
+                5.7.2.1.3.  +this: Como as rotas são SEMPRE strings, o JavaScript + operador, convert string em número
+            5.7.2.2.  Dentro do hero.service.ts, criar o método getHero()
+                      Ex.:
+                      getHero(id: number): Observable<Hero> {
+                        const hero = HEROES.find(h => h.id === id) as Hero;
+                        this.messageService.add(`HeroService: fetched hero id=${id}`);
+                        return of(hero);
+                      }
+                5.7.2.2.1.  O método é Observable, pois é assíncrono
+                5.7.2.2.2.  HEROES, é um array e por isso posso usar o .find() que é um predicate e retorna a primeira ocorrencia do array
+                            conforme definido no arrow function (h => h.id === id) como um objeto de Hero (as Hero)
+            5.7.2.3.  Para criar um botão e retornar a página anterior, é possível criar um método para simular o botão voltar
+                      Ex.: 
+                        goBack(): void {
+                            this.location.back();
+                        }    

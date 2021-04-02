@@ -3,12 +3,11 @@
     The pasted HTML refers to a selectedHero. The new HeroDetailComponent can present any hero, not just a selected hero. 
     So replace "selectedHero" with "hero" everywhere in the template. -->
 <div *ngIf="hero">
-
-    <h2>{{hero.name | uppercase}} Details</h2>
-    <div><span>id: </span>{{hero.id}}</div>
-    <div>
-      <label for="hero-name">Hero name: </label>
-      <input id="hero-name" [(ngModel)]="hero.name" placeholder="name">
-    </div>
-  
+  <h2>{{hero.name | uppercase}} Details</h2>
+  <div><span>id: </span>{{hero.id}}</div>
+  <div>
+    <label for="hero-name">Hero name: </label>
+    <input id="hero-name" [(ngModel)]="hero.name" placeholder="Hero name"/>
   </div>
+  <button (click)="goBack()">go back</button>
+</div>

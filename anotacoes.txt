@@ -142,3 +142,67 @@ Anotações TOUR OF HEROES
                         goBack(): void {
                             this.location.back();
                         }    
+6.  Recuperando dados do servidor: https://angular.io/tutorial/toh-pt6
+    6.1.  Habilitando o serviço HTTP
+        6.1.1.  Este processo é feito através da importação do HttpClient, no arquivo app.module.ts
+                Ex.:
+                import { HttpClientModule } from '@angular/common/http';
+                @NgModule({
+                imports: [
+                    HttpClientModule,
+                ],
+                })
+    6.2.  Neste exemplo, para facilitar, vamos simular um data server utilizando um recurso In-memory Web API
+        6.2.1.  Comando: npm install angular-in-memory-web-api --save
+        6.2.2.  Em seguida, fazer as importações dentro do app.module.ts
+                import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
+                import { InMemoryDataService } from './in-memory-data.service'; (este ficará com erro até a criação do service mais abaixo)
+        6.2.3.  E adicionar ao array de importações, conforme exemplo:
+                Ex.:
+                // The HttpClientInMemoryWebApiModule module intercepts HTTP requests
+                // and returns simulated server responses.
+                // Remove it when a real server is ready to receive requests.
+                HttpClientInMemoryWebApiModule.forRoot(
+                InMemoryDataService, { dataEncapsulation: false }
+                )
+        6.2.4.  Criar o serviço: ng generate service InMemoryData e atualizar o conteúdo (vide arquivo in-memory-data.service.ts)
+    6.3.  Alterando o hero.sevice.ts.
+        6.3.1.  Importando e injetando: import { HttpClient, HttpHeaders } from '@angular/common/http';
+        6.3.2.  Como a chamada da MessageService será muito frequente, criar um metódo log()
+        6.3.3.  GET com HttpClient: Criando um método para fazer o get no http e retornar o array de Hero
+    6.4.  HttpClient. Todos os métodos de HttpClient retornam um Observable.
+          Particularmente o método HttpClient.get() pode retornar MÚLTIPLOS valores de uma só vez. Neste exemplo, contudo
+          definimos o retorno <Hero[]>, que é um especificador e é opcional. Como usamos o TypeScript, isto reduz erros de compilação
+    6.5.  Tratamento de erros: Para capturar um erro, adicionamos o pipe ao observable
+        6.5.1.  Importar: import { catchError, map, tap } from 'rxjs/operators';
+        6.5.2.  adicionar o .pipe ao meu retorno do método .get(). O operador catchError() intercepta o Observable que falhou e passa o erro para uma função 
+                de manipulação
+                Ex.:
+                return this.http.get<Hero[]>(this.heroesUrl)
+                    .pipe(
+                    catchError(this.handleError<Hero[]>('getHeroes', []))
+                    );
+        6.5.3.  Criar a função handleError para poder tratar com segurança o erro
+        6.4.4.  Adicionar o tap() para chamar o método para log() da mensagem
+    6.6.  Atualizar os heróis
+        6.6.1.  Adicionar o evento (click) chamando um método save() que foi criado na classe hero-detail.component.ts
+        6.6.2.  O método save() fará a chamada do método updateHero do service, e subscribe e já aproveito e faço o goBack()
+        6.6.3.  No service, crio o método updateHero() que é assíncrono, e adiciono o pipe, tap e catchError
+            6.6.3.1.  O método HttpClient.put é similar ao get, mas leva 3 parâmetros: A URL, os dados e as opções
+        6.6.4.  O método .put espera por um header para salvar o request.
+                Ex.:
+                httpOptions = {
+                    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+                };
+    6.7.  Adicionando um novo herói. Para adicionar um novo herói foram feitas 3 coisas: Adicionar ao HTML, criar o método na classe e no serviço
+        6.7.1.  HTML: Foi criado o input, pareado com um botão de salvar. O botão chama um método add(heroName.value), que foi criado na classe e recebe
+                o valor como parametro.
+            6.7.1.1.  Importante. Ao input, foi adicionado #heroName que será passado para o envento de (click) como heroName.value.
+            6.7.1.2.  Foi colocado um segundo "comando", após o ; para limpar o valor do campo
+        6.7.2.  Classe: Criado o método que recebe o nome como string chama o método addHero, passando o nome do herói de forma interpolada
+        6.7.3.  Serviço: Para inserir, usamos um POST. Foi criado o métoodo, que retorna um observable de Hero. No post, passamos os 3 parâmetros: A URL, os dados e as opções
+    6.8.  Excluíndo um herói:
+        6.8.1. HTML: Adicionar o botão X ao html e chamada do método delete() passando o objeto Hero
+        6.8.2. Classe: O método utitiliza o predicado filter p/ retornar TUDO MENOS o id filtrado. heroes.filter(h => h !== hero); 
+        6.8.3. Serviço: No serviço foi adicionado um método para executar o httpClient.delete(), que recebe 2 parâmetros: url e a option
+            6.8.3.1.  Eu preciso montar a url para poder fazer a exclusão

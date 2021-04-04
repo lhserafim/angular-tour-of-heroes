@@ -33,4 +33,19 @@ export class HeroesComponent implements OnInit {
     })
   }
 
+  add(name: string): void {
+    name = name.trim();
+    if (!name) { return; }
+    this.heroService.addHero({ name } as Hero)
+      .subscribe(hero => {
+        this.heroes.push(hero);
+      });
+  }
+
+  delete(hero: Hero): void {
+    // Para deletar vou usar o filter (igual ao todoList)
+    this.heroes = this.heroes.filter(h => h !== hero); // traz tudo que é diferente do filtrado
+    this.heroService.deleteHero(hero.id).subscribe();
+  }
+
 }

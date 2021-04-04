@@ -38,4 +38,12 @@ export class HeroDetailComponent implements OnInit {
     this.location.back();
   }
 
+  // O método save que recebe a chamada do evento (click) do template (HTML)
+  // e chama o service para fazer a persistencia da alteração
+  save(): void {
+    this.heroService.updateHero(this.hero).subscribe(() => {
+      this.goBack();
+    })
+  }
+
 }

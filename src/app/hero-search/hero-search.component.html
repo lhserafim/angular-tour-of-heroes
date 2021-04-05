@@ -1,0 +1,16 @@
+<div id="search-component">
+    <label for="search-box">Hero Search</label>
+    <input #searchBox id="search-box" (input)="search(searchBox.value)" />
+    <!-- Repare que estamos usando novamente o conceito #nomeDoInput, para depois pegar o .value dele -->
+  
+    <ul class="search-result">
+      <!-- The $ is a convention that indicates heroes$ is an Observable, not an array.         -->
+      <li *ngFor="let hero of heroes$ | async" >
+        <!-- Faz o roteamento p/ o componente detalhes -->
+        <a routerLink="/detail/{{hero.id}}">
+          <!-- exibe o nome do herói na lista flutuantes -->
+          {{hero.name}} 
+        </a>
+      </li>
+    </ul>
+</div>

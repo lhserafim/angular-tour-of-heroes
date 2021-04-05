@@ -206,3 +206,29 @@ Anotações TOUR OF HEROES
         6.8.2. Classe: O método utitiliza o predicado filter p/ retornar TUDO MENOS o id filtrado. heroes.filter(h => h !== hero); 
         6.8.3. Serviço: No serviço foi adicionado um método para executar o httpClient.delete(), que recebe 2 parâmetros: url e a option
             6.8.3.1.  Eu preciso montar a url para poder fazer a exclusão
+    6.9.  Pesquisando pelo nome. IMPORTANTE! Construir de forma a minimizar os requests HTML
+        6.9.1.  Adicionar um método de pesquisa ao meu service, fazendo a chamada da API. O método recebe uma string (termo da pesquisa) e faz um .get() na URL da API
+            6.9.1.1.  Ela retorna um Observable<Hero[]>
+            6.9.1.2.  Uso o .pipe() e tap() para encadear operador Observable
+            6.9.1.3.  Se não tiver nada ou se der um erro, retorno um array vazio
+        6.9.2.  Criar um componente separado p/ a pesquisa
+            6.9.2.1.  Chamar o componente dentro do componente desejado (dashboard.component.html)
+            6.9.2.2.  Dentro do meu template (hero-search.component.html)
+                6.9.2.2.1.  Adiciono um input, marcado com #searchBox (#nomeDoInput), para poder capturar o valor (searchBox.value) e passar como parâmetro na chaamda do método search()
+                6.9.2.2.2.  Exibindo a lista com os resultados da pesquisa. Aqui é o truque. Usando a diretiva estrutural *ngFor, faço o let em um Observable (heroes$) e faço o pipe | com o async
+                    6.9.2.2.2.1  AsyncPipe: Como o *ngFor itera sobre uma lista de Observable, preciso fazer o pipe para o async. Assim o Angular identifica e subscreve a um Observable e assim não preciso fazer manualmente na classe
+                6.9.2.2.3.  Crio o link routerLink="/detail/{{hero.id}} para que ao clicar, navegue para o componente de detalhes
+            6.9.2.3.  Alterar a classe hero-search.component.ts. Foram feitas, importações e injeções (vide arquivo)
+                6.9.2.3.1.  Foi criado uma propriedade do tipo Observable: heroes$: Observable<Hero[]>;
+                6.9.2.3.2.  Foi criada uma propriedade do tipo Subject: private searchTerms = new Subject<string>();
+                    6.9.2.3.2.1  Um Subject é tanto uma fonte ao observable quanto um próprio observable. 
+                                 Você pode adicionar valores a este observable chamando o next(value). Os valores são capturados pelo template através do evento (input) que faz o bind na chamada método:
+                                 Ex.:
+                                 (input)="search(searchBox.value)
+                6.9.2.3.3.  Foi criado o método para ir adicionando os caracteres ao termo da pesquisa
+                6.9.2.3.4.  Para evitar a taxação do servidor e fazer um request a cada novo termo, foi encadeada uma sequencia de métodos (RxJS operators), através de pipe e chamado dentro do ngOnInit()
+                    6.9.2.3.4.1.  debounceTime(300): Espera 300 milisegundos para considerar o termo da pesquisa
+                    6.9.2.3.4.1.  distinctUntilChanged(): Garante que o request só será feito se o termo for alterado
+                    6.9.2.3.4.1.  switchMap(): É um operador que organiza o retorno dos termos pesquisados. Mesmo com uma pausa de 300ms, podemos ter vários requests HTTP retornando "fora de ordem". Quem faz a gestão destes retorno, ordenando por prioridade
+                                  e trazendo APENAS o resultado do último termo pesquisado é este operador. 
+                                  O mesmo Ssó será executado caso o termpo "passe" pelos dois operadores RxJS anteriores

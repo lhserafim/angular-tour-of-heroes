@@ -1,3 +1,14 @@
+<app-hero-search></app-hero-search>
+<div>
+  <label for="new-hero">Hero name: </label>
+  <input id="new-hero" #heroName />
+
+  <!-- (click) passes input value to add() and then clears the input -->
+  <button class="add-button" (click)="add(heroName.value); heroName.value=''">
+    Add hero
+  </button>
+</div>
+
 <h2>My Heroes</h2>
 <ul class="heroes">
     <li *ngFor="let hero of heroes">
@@ -8,15 +19,6 @@
         (click)="delete(hero)">x</button>
     </li>
 </ul>
-<div>
-  <label for="new-hero">Hero name: </label>
-  <input id="new-hero" #heroName />
-
-  <!-- (click) passes input value to add() and then clears the input -->
-  <button class="add-button" (click)="add(heroName.value); heroName.value=''">
-    Add hero
-  </button>
-</div>
 
 
 
